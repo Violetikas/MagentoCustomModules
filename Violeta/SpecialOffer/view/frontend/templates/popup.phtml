@@ -1,0 +1,39 @@
+
+<?php
+$helper = $this->helper('Violeta\SpecialOffer\Helper\Data');
+$delay = $helper->getGeneralConfig('delay');
+$enabled = $helper->getGeneralConfig('enable');
+$title = $helper->getGeneralConfig('title');
+?>
+<?php if ($enabled && $content = $block->getContent()): ?>
+<script>
+    require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function(
+            $,
+            modal
+        ) {
+            var options = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: true,
+                buttons: [{
+                    text: $.mage.__('Close'),
+                    class: '',
+                    click: function () {
+                        this.closeModal();
+                    }
+                }]
+            };
+
+            var popup = modal(options, $('#popup-modal'));
+            $("#popup-modal").modal("openModal");
+            }, delay * 1000);
+
+        }
+    )
+</script>
+<?php endif; ?>
