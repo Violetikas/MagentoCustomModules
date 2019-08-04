@@ -6,7 +6,6 @@
             <general>
                 <enable>1</enable>
                 <display_text>Special Offer!</display_text>
-                <products_limit>10</products_limit>
             </general>
         </main_settings>
     </default>

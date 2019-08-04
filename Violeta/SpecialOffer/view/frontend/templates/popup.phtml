@@ -1,39 +1,48 @@
-
 <?php
-$helper = $this->helper('Violeta\SpecialOffer\Helper\Data');
-$delay = $helper->getGeneralConfig('delay');
-$enabled = $helper->getGeneralConfig('enable');
-$title = $helper->getGeneralConfig('title');
+
+use Violeta\SpecialOffer\Block\SpecialOffer;
+
+$config = $block->getConfigArray();
+$content = $block->getLayout()
+    ->createBlock('Magento\Cms\Block\Block')
+    ->setBlockId(SpecialOffer::POP_BLOCK_IDENTIFIER)
+    ->toHtml();
 ?>
-<?php if ($enabled && $content = $block->getContent()): ?>
-<script>
-    require(
-        [
-            'jquery',
-            'Magento_Ui/js/modal/modal'
-        ],
-        function(
-            $,
-            modal
-        ) {
-            var options = {
-                type: 'popup',
-                responsive: true,
-                innerScroll: true,
-                buttons: [{
-                    text: $.mage.__('Close'),
-                    class: '',
-                    click: function () {
-                        this.closeModal();
-                    }
-                }]
-            };
 
-            var popup = modal(options, $('#popup-modal'));
-            $("#popup-modal").modal("openModal");
-            }, delay * 1000);
-
-        }
-    )
-</script>
+<?php if ($config['enable'] && !empty($content)): ?>
+    <div id="popup-modal" style="display: none">
+        <h1><?php echo $content ?></h1>
+    </div>
+    <script>
+        require(
+            [
+                'jquery',
+                'Magento_Ui/js/modal/modal'
+            ],
+            function (
+                $,
+                modal
+            ) {
+                let delay = <?php echo $config['delay'] ?>;
+                let title = '<?php echo $config['title'] ?>';
+                setTimeout(function () {
+                    let options = {
+                        type: 'popup',
+                        responsive: true,
+                        innerScroll: true,
+                        title: title,
+                        buttons: [{
+                            text: $.mage.__('Close'),
+                            class: '',
+                            click: function () {
+                                this.closeModal();
+                            }
+                        }]
+                    };
+                    let popup = modal(options, $('#popup-modal'));
+                    $('#popup-modal').modal('openModal');
+                }, delay * 1000);
+            }
+        );
+    </script>
 <?php endif; ?>

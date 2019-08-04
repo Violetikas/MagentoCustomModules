@@ -1,27 +1,28 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="specialoffer" translate="label" sortOrder="10">
-            <label>Special Offer Popup</label>
+        <tab id="special_offer_popup" translate="label" sortOrder="10">
+            <label>Special Offering Popup</label>
         </tab>
-        <section id="specialoffer_main_settings" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="special_offer_popup_main_settings" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
             <label>Main Settings</label>
-            <tab>specialoffer</tab>
-            <resource>Violeta_SpecialOffer::specialoffer_main_settings_config</resource>
-            <group id="specialoffer_general" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+            <tab>special_offer_popup</tab>
+            <resource>Violeta_SpecialOffer::main_settings_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>General Configuration</label>
                 <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Module Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="delay" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Delay</label>
-                    <comment>This is popup delay in seconds</comment>
+                <field id="popup_title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Popup Title</label>
+                    <comment>This text will display on the frontend.</comment>
                 </field>
-                <field id="title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Popup title</label>
-                    <comment>This is a title of popup window</comment>
+                <field id="popup_delay" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Popup Delay</label>
+                    <comment>Popup delay time in seconds</comment>
+                    <validate>validate-number</validate>
                 </field>
             </group>
         </section>
