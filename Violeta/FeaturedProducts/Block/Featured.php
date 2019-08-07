@@ -16,13 +16,4 @@ class Featured extends ListProduct
     {
         $this->_productCollection = $collection;
     }
-
-    /**
-     * @return string
-     */
-
-    public function getHelloWorldTxt()
-    {
-        return 'Hello world!';
-    }
 }

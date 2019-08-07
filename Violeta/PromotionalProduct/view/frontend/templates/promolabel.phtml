@@ -1,0 +1,16 @@
+<?php if ($block->isProductPromotional()): ?>
+    <div class="card" style="width: 30em; padding: 1em; background: <?php echo $block->getLabelBg() ?>; font-weight: bold">
+        <div class="card-header"
+              style="background: <?php echo $block->getLabelBg() ?>;
+                      color: <?php echo $block->getTextColor() ?>;">
+            <?php echo $block->getLabelText() ?>
+        </div>
+        <div class="card-body"
+              style="position: relative;
+                      background: <?php echo $block->getLabelBg() ?>;
+                      top: 1em;
+                      bottom: 2em">
+            <?php echo $block->getTimeleft() ?>
+        </div>
+    </div>
+<?php endif; ?>

@@ -43,8 +43,8 @@ class SpecialOffer extends Template
     {
         return [
             'enable' => $this->helper->getGeneralConfig('enable'),
-            'title' => $this->helper->getGeneralConfig('title'),
-            'delay' => $this->helper->getGeneralConfig('delay')
+            'title' => $this->helper->getGeneralConfig('popup_title'),
+            'delay' => $this->helper->getGeneralConfig('popup_delay')
         ];
     }
 }

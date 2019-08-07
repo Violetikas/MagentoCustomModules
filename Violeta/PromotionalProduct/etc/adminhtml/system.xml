@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="promotional" translate="label" sortOrder="10">
+            <label>Promotional Products</label>
+        </tab>
+        <section id="promotional" translate="label" sortOrder="10" showInDefault="1"
+                 showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Main Settings</label>
+            <tab>promotional</tab>
+            <resource>Violeta_PromotionalProducts::promotional_config</resource>
+            <group id="general" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Configuration</label>
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0"
+                       showInStore="0">
+                    <label>Module Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="label_name" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0"
+                       showInStore="0">
+                    <label>Name your label</label>
+                    <comment>This text will display on the frontend.</comment>
+                </field>
+                <field id="background" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0"
+                       showInStore="0">
+                    <label>Promotional message background color</label>
+                </field>
+                <field id="text_color" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Text color</label>
+                </field>
+                <field id="end_date" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Full promotion end time (insert format)</label>
+                    <frontend_model>Violeta\PromotionalProduct\Block\Adminhtml\System\Config\Date</frontend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
+

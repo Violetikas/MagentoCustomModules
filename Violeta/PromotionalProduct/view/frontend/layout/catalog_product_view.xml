@@ -1,0 +1,13 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Promotion!</title>
+    </head>
+    <body>
+        <referenceContainer name="product.info.main">
+            <block class="Violeta\PromotionalProduct\Block\Promotional" name="promotional.product"
+                   template="Violeta_PromotionalProduct::promolabel.phtml" before="product.info.price">
+            </block>
+        </referenceContainer>
+    </body>
+</page>

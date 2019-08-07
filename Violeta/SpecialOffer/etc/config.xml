@@ -2,11 +2,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <main_settings>
+        <specialoffer>
             <general>
-                <enable>1</enable>
-                <display_text>Special Offer!</display_text>
+                <enable>0</enable>
+                <popup_title>Special Offer!</popup_title>
+                <popup_delay>100</popup_delay>
             </general>
-        </main_settings>
+        </specialoffer>
     </default>
 </config>

@@ -1,0 +1,48 @@
+<?php
+/** @var  Magento\Catalog\Block\Product\View\Attributes $block */
+$product = $block->getProduct();
+?>
+<?php if ($cmsBlock = $product->getData('size_chart')): ?>
+    <button id="open-chart" class="action info">
+        Size Chart
+    </button>
+    <div id="popup-chart" style="display: none">
+        <?php
+        echo $block->getLayout()
+            ->createBlock('Magento\Cms\Block\Block')
+            ->setBlockId($cmsBlock)
+            ->toHtml();
+        ?>
+    </div>
+    <script>
+        require(
+            [
+                'jquery',
+                'Magento_Ui/js/modal/modal'
+            ],
+            function (
+                $,
+                modal
+            ) {
+                let options = {
+                    autoOpen: false,
+                    type: 'popup',
+                    responsive: true,
+                    innerScroll: true,
+                    title: 'Size Chart',
+                    buttons: [{
+                        text: $.mage.__('Close'),
+                        class: '',
+                        click: function () {
+                            this.closeModal();
+                        }
+                    }]
+                };
+                let popup = modal(options, $('#popup-chart'));
+                $("#open-chart").on('click', function () {
+                    $("#popup-chart").modal("openModal");
+                });
+            }
+        );
+    </script>
+<? endif; ?>
