@@ -11,9 +11,12 @@ use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\CarrierInterface;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
+use Violeta\CustomShipping\API\CurrencyRatesApiData;
 use Violeta\CustomShipping\API\CustomShippingApiData;
-
+use Violeta\CustomShipping\Helper\CurrencyData;
 
 /**
  * Custom shipping model
@@ -39,6 +42,9 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
      * @var string
      */
     private $country;
+    private $currency;
+    private $currencyFactory;
+    private $storeManager;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -47,6 +53,9 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
      * @param ResultFactory $rateResultFactory
      * @param MethodFactory $rateMethodFactory
      * @param CustomShippingApiData $apiData
+     * @param CurrencyData $helper
+     * @param StoreManagerInterface $storeManager
+     * @param CurrencyFactory $currencyFactory
      * @param array $data
      */
     public function __construct(
@@ -56,6 +65,9 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
         ResultFactory $rateResultFactory,
         MethodFactory $rateMethodFactory,
         CustomShippingApiData $apiData,
+        CurrencyRatesApiData $currency,
+        StoreManagerInterface $storeManager,
+        CurrencyFactory $currencyFactory,
         array $data = []
     ) {
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
@@ -63,6 +75,9 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
         $this->rateResultFactory = $rateResultFactory;
         $this->rateMethodFactory = $rateMethodFactory;
         $this->apiData = $apiData;
+        $this->currency = $currency;
+        $this->storeManager = $storeManager;
+        $this->currencyFactory = $currencyFactory;
     }
 
     /**
@@ -93,9 +108,10 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
         $method->setMethodTitle($dataByCountry['methodName']);
 
         $shippingCost = (float)$dataByCountry['price'];
+        $convertedPrice = $this->convertPrice($shippingCost, $this->country);
 
-        $method->setPrice($shippingCost);
-        $method->setCost($shippingCost);
+        $method->setPrice($convertedPrice);
+        $method->setCost($convertedPrice);
 
         $result->append($method);
 
@@ -108,5 +124,19 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
     public function getAllowedMethods()
     {
         return [$this->_code => $this->getConfigData('name')];
+    }
+
+    private function convertPrice($amount, $countryCode)
+    {
+        $currency = $this->currency->getCurrencyData($countryCode);
+
+        $rate = $this->currencyFactory->create();
+        $rate = $rate
+            ->load($currency)
+            ->getAnyRate(
+                $this->storeManager->getStore()->getCurrentCurrencyCode()
+            );
+
+        return $amount * $rate;
     }
 }
