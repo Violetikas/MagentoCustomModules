@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <carriers>
             <customshipping>
@@ -8,7 +9,9 @@
                 <name>Custom Shipping Method Name</name>
                 <shipping_cost>10</shipping_cost>
                 <sallowspecific>0</sallowspecific>
-                <sort_order>15</sort_order>
+                <apiurl>https://5d317bb345e2b00014d93f1c.mockapi.io/auth/</apiurl>
+                <apiuserid>658764298</apiuserid>
+                <apiurlfordata>https://5d317bb345e2b00014d93f1c.mockapi.io/</apiurlfordata>
                 <model>Violeta\CustomShipping\Model\Carrier\Customshipping</model>
             </customshipping>
         </carriers>

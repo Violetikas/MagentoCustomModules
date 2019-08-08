@@ -43,9 +43,17 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <frontend_class>shipping-skip-hide</frontend_class>
                 </field>
-                <field id="sort_order" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1"
-                       showInStore="0">
-                    <label>Sort Order</label>
+                <field id="apiurl" translate="label" type="text" sortOrder="90" showInDefault="1"
+                showInWebsite="1" showInStore="0">
+                <label>Custom shipping API URL for getting unique token</label>
+                </field>
+                <field id="apiuserid" translate="label" type="text" sortOrder="90" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Custom shipping API user ID</label>
+                </field>
+                <field id="apiurlfordata" translate="label" type="text" sortOrder="90" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Custom shipping API URL</label>
                 </field>
             </group>
         </section>

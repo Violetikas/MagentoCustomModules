@@ -102,10 +102,10 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
         $method = $this->rateMethodFactory->create();
 
         $method->setCarrier($this->_code);
-        $method->setCarrierTitle($dataByCountry['carierName']);
+        $method->setCarrierTitle($this->makeNameHumanReadable($dataByCountry['carierName']));
 
         $method->setMethod($this->_code);
-        $method->setMethodTitle($dataByCountry['methodName']);
+        $method->setMethodTitle($this->makeNameHumanReadable($dataByCountry['methodName']));
 
         $shippingCost = (float)$dataByCountry['price'];
         $convertedPrice = $this->convertPrice($shippingCost, $this->country);
@@ -137,6 +137,13 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
                 $this->storeManager->getStore()->getCurrentCurrencyCode()
             );
 
-        return $amount * $rate;
+        return round(($amount * $rate), 0);
+    }
+
+    private function makeNameHumanReadable($name)
+    {
+
+        $result = preg_replace('/[\W-_]/', ' ', $name);
+        return $result;
     }
 }
