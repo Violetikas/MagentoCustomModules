@@ -3,6 +3,7 @@
 
 namespace Violeta\PromotionalProduct\Block;
 
+use DateTime;
 use Magento\Framework\View\Element\Template;
 use Magento\Catalog\Helper\Data;
 
@@ -58,8 +59,8 @@ class Promotional extends Template
 
     public function getTimeleft()
     {
-        $endDate = new \DateTime($this->config->getGeneralConfig('end_date'));
-        $today = new \DateTime('now');
+        $endDate = new DateTime($this->config->getGeneralConfig('end_date'));
+        $today = new DateTime('now');
         $difference = $today->diff($endDate);
         if ($difference) {
             return $this->getTimeleftString($difference);

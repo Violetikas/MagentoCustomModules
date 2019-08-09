@@ -17,47 +17,21 @@ use Psr\Log\LoggerInterface;
 use Violeta\CustomShipping\API\CurrencyRatesApiData;
 use Violeta\CustomShipping\API\CustomShippingApiData;
 use Violeta\CustomShipping\Helper\CurrencyData;
+use Violeta\CustomShipping\Helper\MappingHelper;
 
-/**
- * Custom shipping model
- */
 class Customshipping extends AbstractCarrier implements CarrierInterface
 {
-    /**
-     * @var string
-     */
     protected $_code = 'customshipping';
     protected $_isFixed = true;
-
-    /**
-     * @var ResultFactory
-     */
     private $rateResultFactory;
     private $rateMethodFactory;
-    /**
-     * @var CustomShippingApiData
-     */
     private $apiData;
-    /**
-     * @var string
-     */
     private $country;
     private $currency;
     private $currencyFactory;
     private $storeManager;
+    private $helper;
 
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param ErrorFactory $rateErrorFactory
-     * @param LoggerInterface $logger
-     * @param ResultFactory $rateResultFactory
-     * @param MethodFactory $rateMethodFactory
-     * @param CustomShippingApiData $apiData
-     * @param CurrencyData $helper
-     * @param StoreManagerInterface $storeManager
-     * @param CurrencyFactory $currencyFactory
-     * @param array $data
-     */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         ErrorFactory $rateErrorFactory,
@@ -68,9 +42,9 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
         CurrencyRatesApiData $currency,
         StoreManagerInterface $storeManager,
         CurrencyFactory $currencyFactory,
-        array $data = []
+        MappingHelper $helper
     ) {
-        parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
+        parent::__construct($scopeConfig, $rateErrorFactory, $logger);
 
         $this->rateResultFactory = $rateResultFactory;
         $this->rateMethodFactory = $rateMethodFactory;
@@ -78,49 +52,30 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
         $this->currency = $currency;
         $this->storeManager = $storeManager;
         $this->currencyFactory = $currencyFactory;
+        $this->helper = $helper;
     }
 
-    /**
-     * Custom Shipping Rates Collector
-     *
-     * @param RateRequest $request
-     * @return Result|bool
-     */
     public function collectRates(RateRequest $request)
     {
         if (!$this->getConfigFlag('active')) {
             return false;
         }
         $this->country = $request->getDestCountryId();
-
         $dataByCountry = $this->apiData->getApiData($this->country);
-
-        /** @var Result $result */
         $result = $this->rateResultFactory->create();
-
-        /** @var Method $method */
         $method = $this->rateMethodFactory->create();
-
         $method->setCarrier($this->_code);
-        $method->setCarrierTitle($this->makeNameHumanReadable($dataByCountry['carierName']));
-
+        $method->setCarrierTitle($this->helper->formatName($dataByCountry['carierName'], 'carrier'));
         $method->setMethod($this->_code);
-        $method->setMethodTitle($this->makeNameHumanReadable($dataByCountry['methodName']));
-
+        $method->setMethodTitle($this->helper->formatName($dataByCountry['methodName'], 'method'));
         $shippingCost = (float)$dataByCountry['price'];
         $convertedPrice = $this->convertPrice($shippingCost, $this->country);
-
         $method->setPrice($convertedPrice);
         $method->setCost($convertedPrice);
-
         $result->append($method);
-
         return $result;
     }
 
-    /**
-     * @return array
-     */
     public function getAllowedMethods()
     {
         return [$this->_code => $this->getConfigData('name')];
@@ -129,20 +84,17 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
     private function convertPrice($amount, $countryCode)
     {
         $currency = $this->currency->getCurrencyData($countryCode);
-
         $rate = $this->currencyFactory->create();
         $rate = $rate
             ->load($currency)
             ->getAnyRate(
                 $this->storeManager->getStore()->getCurrentCurrencyCode()
             );
-
         return round(($amount * $rate), 0);
     }
 
     private function makeNameHumanReadable($name)
     {
-
         $result = preg_replace('/[\W-_]/', ' ', $name);
         return $result;
     }

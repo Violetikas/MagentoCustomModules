@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Violeta\PromotionalProduct\Plugins;
 
 use Magento\Catalog\Model\Product;

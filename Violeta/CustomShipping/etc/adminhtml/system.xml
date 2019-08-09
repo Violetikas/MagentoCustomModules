@@ -51,11 +51,29 @@
                        showInWebsite="1" showInStore="0">
                     <label>Custom shipping API user ID</label>
                 </field>
-                <field id="apiurlfordata" translate="label" type="text" sortOrder="90" showInDefault="1"
+                <field id="apiurlfordata" translate="label" type="text" sortOrder="100" showInDefault="1"
                        showInWebsite="1" showInStore="0">
                     <label>Custom shipping API URL</label>
+                </field>
+                <field id="carrier_mapping" translate="label tooltip" sortOrder="110" showInStore="0" showInDefault="1"
+                       showInWebsite="1">
+                    <can_be_empty>1</can_be_empty>
+                    <label>Custom names for shipping carriers</label>
+                    <frontend_model>Violeta\CustomShipping\Block\Adminhtml\System\Config\Form\Field\NameMapping</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <tooltip>Write custom names for carriers.</tooltip>
+                </field>
+                <field id="method_mapping" translate="label tooltip" sortOrder="110" showInStore="0" showInDefault="1"
+                       showInWebsite="1">
+                    <can_be_empty>1</can_be_empty>
+                    <label>Custom names for shipping carriers</label>
+                    <frontend_model>Violeta\CustomShipping\Block\Adminhtml\System\Config\Form\Field\NameMapping</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <tooltip>Write custom names for carriers.</tooltip>
                 </field>
             </group>
         </section>
     </system>
 </config>
+
+
