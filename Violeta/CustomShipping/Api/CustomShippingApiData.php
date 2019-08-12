@@ -1,6 +1,6 @@
 <?php
 
-namespace Violeta\CustomShipping\API;
+namespace Violeta\CustomShipping\Api;
 
 use Violeta\CustomShipping\Helper\Data;
 use Zend\Http\Client;

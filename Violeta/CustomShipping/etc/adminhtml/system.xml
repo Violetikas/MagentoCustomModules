@@ -45,35 +45,33 @@
                 </field>
                 <field id="apiurl" translate="label" type="text" sortOrder="90" showInDefault="1"
                 showInWebsite="1" showInStore="0">
-                <label>Custom shipping API URL for getting unique token</label>
+                <label>Custom shipping Api URL for getting unique token</label>
                 </field>
                 <field id="apiuserid" translate="label" type="text" sortOrder="90" showInDefault="1"
                        showInWebsite="1" showInStore="0">
-                    <label>Custom shipping API user ID</label>
+                    <label>Custom shipping Api user ID</label>
                 </field>
                 <field id="apiurlfordata" translate="label" type="text" sortOrder="100" showInDefault="1"
                        showInWebsite="1" showInStore="0">
-                    <label>Custom shipping API URL</label>
+                    <label>Custom shipping Api URL</label>
                 </field>
                 <field id="carrier_mapping" translate="label tooltip" sortOrder="110" showInStore="0" showInDefault="1"
                        showInWebsite="1">
                     <can_be_empty>1</can_be_empty>
                     <label>Custom names for shipping carriers</label>
-                    <frontend_model>Violeta\CustomShipping\Block\Adminhtml\System\Config\Form\Field\NameMapping</frontend_model>
+                    <frontend_model>Violeta\CustomShipping\Block\Adminhtml\System\Config\Form\Field\CarrierNameMapping</frontend_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                     <tooltip>Write custom names for carriers.</tooltip>
                 </field>
                 <field id="method_mapping" translate="label tooltip" sortOrder="110" showInStore="0" showInDefault="1"
                        showInWebsite="1">
                     <can_be_empty>1</can_be_empty>
-                    <label>Custom names for shipping carriers</label>
-                    <frontend_model>Violeta\CustomShipping\Block\Adminhtml\System\Config\Form\Field\NameMapping</frontend_model>
+                    <label>Custom names for shipping method names</label>
+                    <frontend_model>Violeta\CustomShipping\Block\Adminhtml\System\Config\Form\Field\MethodNameMapping</frontend_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
-                    <tooltip>Write custom names for carriers.</tooltip>
+                    <tooltip>Write custom names for shipping methods.</tooltip>
                 </field>
             </group>
         </section>
     </system>
 </config>
-
-
