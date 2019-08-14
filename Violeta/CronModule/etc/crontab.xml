@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <group id="default">
+        <job name="user_update" instance="Violeta/CronModule/Cron/UserUpdateCronTask" method="execute">
+            <schedule>* * * * *</schedule>
+        </job>
+    </group>
+</config>

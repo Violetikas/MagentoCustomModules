@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_submit_all_after">
+        <observer name="AfterOrderCreate" instance="Violeta\CustomShippingModule\Observer\OrderCreatedObserver"/>
+    </event>
+    <event name="sales_order_save_after">
+        <observer name="AfterOrderUpdate" instance="Violeta\CustomShippingModule\Observer\OrderUpdatedObserver"/>
+    </event>
+    <event name="order_cancel_after">
+        <observer name="AfterOrderDelete" instance="Violeta\CustomShippingModule\Observer\OrderDeletedObserver"/>
+    </event>
+</config>

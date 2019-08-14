@@ -3,10 +3,10 @@
 $product = $block->getProduct();
 ?>
 <?php if ($cmsBlock = $product->getData('size_chart')): ?>
-    <button id="open-chart" class="action info">
+    <button id="open-sizechart" class="action info">
         Size Chart
     </button>
-    <div id="popup-chart" style="display: none">
+    <div id="popup-modal" style="display: none">
         <?php
         echo $block->getLayout()
             ->createBlock('Magento\Cms\Block\Block')
@@ -38,9 +38,9 @@ $product = $block->getProduct();
                         }
                     }]
                 };
-                let popup = modal(options, $('#popup-chart'));
-                $("#open-chart").on('click', function () {
-                    $("#popup-chart").modal("openModal");
+                let popup = modal(options, $('#popup-modal'));
+                $("#open-sizechart").on('click', function () {
+                    $("#popup-modal").modal("openModal");
                 });
             }
         );
