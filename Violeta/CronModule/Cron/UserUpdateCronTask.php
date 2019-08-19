@@ -2,19 +2,40 @@
 
 namespace Violeta\CronModule\Cron;
 
-use \Psr\Log\LoggerInterface;
+use Violeta\CronModule\Customer\CustomerChangeTracker;
+use Violeta\CronModule\Logger\CustomCronLogger;
+use Violeta\CronModule\Output\ChangesOutputWriter;
 
 class UserUpdateCronTask
 {
     protected $logger;
+    /**
+     * @var CustomerChangeTracker
+     */
+    private $tracker;
+    /**
+     * @var ChangesOutputWriter
+     */
+    private $output;
 
-    public function __construct(LoggerInterface $logger)
-    {
+    public function __construct(
+        CustomerChangeTracker $tracker,
+        CustomCronLogger $logger,
+        ChangesOutputWriter $output
+    ) {
         $this->logger = $logger;
+        $this->tracker = $tracker;
+        $this->output = $output;
     }
 
     public function execute()
     {
-        $this->logger->info('!!!!!!!!!!!!!!!!!!!!!!!CRON WORKS!!!!!!!!!!!!!!!!!!!');
+        $this->logger->log('Looking for changes since last time.');
+        $changes = $this->tracker->getChangesSinceLastTime();
+        $outputFile = $this->output->writeChanges($changes);
+        $this->logger->log(sprintf('%d changes written to file %s', count($changes), $outputFile));
+        $this->tracker->remember();
+
+        return 'hello';
     }
 }

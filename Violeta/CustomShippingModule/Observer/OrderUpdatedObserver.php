@@ -4,7 +4,7 @@ namespace Violeta\CustomShippingModule\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Violeta\CustomShippingModule\Api\CustomShippingApiData;
+use Violeta\CustomShippingModule\Api\CustomShippingApiClient;
 use Violeta\CustomShippingModule\Logger\CustomShippingLogger;
 use Violeta\CustomShippingModule\Model\ApiOrderFactory;
 
@@ -18,7 +18,7 @@ class OrderUpdatedObserver implements ObserverInterface
     private $apiOrderFactory;
 
     public function __construct(
-        CustomShippingApiData $apiData,
+        CustomShippingApiClient $apiData,
         CustomShippingLogger $logger,
         ApiOrderFactory $apiOrderFactory
     ) {
@@ -55,7 +55,7 @@ class OrderUpdatedObserver implements ObserverInterface
             'status' => $orderData['status'],
             'address' => $this->getAddressData($order),
             'items' => $this->getOrderItemsData($order),
-            'shippingMethod' => $orderData['shipping_description']
+            'shippingMethod' => $orderData['shipping_description'],
         ];
         return $orderDataArray;
     }
@@ -67,7 +67,7 @@ class OrderUpdatedObserver implements ObserverInterface
             'city' => $addressData['city'],
             'country' => $addressData['country_id'],
             'postCode' => $addressData['postcode'],
-            'street' => $addressData['street']
+            'street' => $addressData['street'],
         ];
         return $address;
     }
@@ -88,7 +88,7 @@ class OrderUpdatedObserver implements ObserverInterface
             $orderItemsData[] = [
                 'name' => $item->getName(),
                 'price' => $item->getPrice(),
-                'qty' => $item->getQtyOrdered()
+                'qty' => $item->getQtyOrdered(),
             ];
         }
         return $orderItemsData;

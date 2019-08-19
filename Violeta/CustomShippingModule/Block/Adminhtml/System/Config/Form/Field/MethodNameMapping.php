@@ -5,7 +5,6 @@ namespace Violeta\CustomShippingModule\Block\Adminhtml\System\Config\Form\Field;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
 use Magento\Framework\Data\Form\Element\Factory;
-use Violeta\CustomShippingModule\Block\Adminhtml\System\Config\Form\Field\Checkbox;
 
 class MethodNameMapping extends AbstractFieldArray
 {

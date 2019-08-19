@@ -5,10 +5,10 @@ namespace Violeta\CustomShippingModule\Api;
 use Violeta\CustomShippingModule\Helper\Data;
 use Zend\Http\Client;
 use Zend\Http\Exception\RuntimeException;
-use Zend\Http\Headers;
 use Zend\Http\Request;
 
-class CustomShippingApiData
+class CustomShippingApiClient
+//TODO refactor name to API client
 {
     protected $zendClient;
     private $data;
@@ -45,6 +45,7 @@ class CustomShippingApiData
     public function getApiData($countryCode)
     {
         $apiUriForData = $this->data->getConfigValue('apiurlfordata');
+        //TODO perkelti i konfiga
         $response = [];
         try {
             $apiToken = $this->getApiToken();
@@ -64,12 +65,14 @@ class CustomShippingApiData
     {
         return ['id' => 15];
         // TODO: restore actual
-        return $this->processApiRequest(
-            'https://5d317bb345e2b00014d93f1c.mockapi.io/' .
-            'store1',
-            'POST',
-            $data
-        );
+//        return $this->processApiRequest(
+//            'https://5d317bb345e2b00014d93f1c.mockapi.io/' .
+//            'store1',
+//            'POST',
+//            $data
+//        );
+
+        //TODO persikelti viska i konfiga ir naudoti konstantas
     }
 
     public function updateOrder($apiOrderId, array $data)
@@ -96,7 +99,7 @@ class CustomShippingApiData
         string $method,
         array $body = []
     ) {
-        $init = curl_init();
+        $initHandler = curl_init();
         $options = [
             CURLOPT_URL => $uri,
             CURLOPT_CUSTOMREQUEST => $method,
@@ -105,8 +108,11 @@ class CustomShippingApiData
             CURLOPT_HTTPHEADER => ['Content-type: application/json']
         ];
 
-        curl_setopt_array($init, $options);
-        $result = curl_exec($init);
+        curl_setopt_array($initHandler, $options);
+        $result = curl_exec($initHandler);
         return json_decode($result, true);
     }
+
+
+    //TODO persidaryti viska i curl
 }

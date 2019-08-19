@@ -4,7 +4,7 @@ namespace Violeta\CustomShippingModule\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Violeta\CustomShippingModule\Api\CustomShippingApiData;
+use Violeta\CustomShippingModule\Api\CustomShippingApiClient;
 use Violeta\CustomShippingModule\Logger\CustomShippingLogger;
 use Violeta\CustomShippingModule\Model\ApiOrderFactory;
 
@@ -18,7 +18,7 @@ class OrderDeletedObserver implements ObserverInterface
     private $apiOrderFactory;
 
     public function __construct(
-        CustomShippingApiData $apiData,
+        CustomShippingApiClient $apiData,
         CustomShippingLogger $logger,
         ApiOrderFactory $apiOrderFactory
     ) {
@@ -40,6 +40,7 @@ class OrderDeletedObserver implements ObserverInterface
             try {
                 $apiOrder->delete();
             } catch (\Exception $e) {
+                echo $e->getMessage();
             }
             $this->logger->log(
                 'Delete order response: ',

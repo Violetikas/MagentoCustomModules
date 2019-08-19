@@ -1,15 +1,15 @@
 <?php
 
-namespace Violeta\CustomShippingModule\Model;
+namespace Violeta\CronModule\Model;
 
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 
-class ApiOrder extends AbstractModel implements IdentityInterface
+class UserUpdate extends AbstractModel implements IdentityInterface
 {
-    const CACHE_TAG = 'api_orders_ids';
-    protected $_cacheTag = 'api_orders_ids';
-    protected $_eventPrefix = 'api_orders_ids';
+    const CACHE_TAG = 'user_updates';
+    protected $_cacheTag = 'user_updates';
+    protected $_eventPrefix = 'user_updates';
 
     public function getIdentities()
     {
@@ -24,6 +24,6 @@ class ApiOrder extends AbstractModel implements IdentityInterface
 
     protected function _construct()
     {
-        $this->_init('Violeta\CustomShippingModule\Model\ResourceModel\ApiOrder');
+        $this->_init('Violeta\CronModule\Model\ResourceModel\UserUpdate');
     }
 }

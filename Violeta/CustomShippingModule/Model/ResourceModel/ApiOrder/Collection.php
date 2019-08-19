@@ -12,6 +12,7 @@ class Collection extends AbstractCollection
 
     protected function _construct()
     {
-        $this->_init('Violeta\CustomShippingModule\Model\ApiOrder', 'Violeta\CustomShippingModule\Model\ResourceModel\ApiOrder');
+        $this->_init('Violeta\CustomShippingModule\Model\ApiOrder',
+            'Violeta\CustomShippingModule\Model\ResourceModel\ApiOrder');
     }
 }

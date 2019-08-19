@@ -1,7 +1,7 @@
 <?php
 
-
 namespace Violeta\CustomShippingModule\Block\Adminhtml\System\Config\Form\Field;
+
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
 use Magento\Framework\Data\Form\Element\Factory;
@@ -9,7 +9,6 @@ use Magento\Framework\Data\Form\Element\Factory;
 class CarrierNameMapping extends AbstractFieldArray
 {
     protected $elementFactory;
-    private $checkbox;
 
     public function __construct(
         Context $context,

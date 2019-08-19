@@ -20,6 +20,4 @@ class Checkbox extends AbstractBlock
             (isset($column['class']) ? $column['class'] : 'input-text') . '"' .
             (isset($column['style']) ? ' style="' . $column['style'] . '"' : '') . '/>';
     }
-
-
 }

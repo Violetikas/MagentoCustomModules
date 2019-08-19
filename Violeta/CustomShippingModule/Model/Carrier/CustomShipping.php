@@ -12,7 +12,7 @@ use Magento\Shipping\Model\Rate\ResultFactory;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
-use Violeta\CustomShippingModule\Api\CustomShippingApiData;
+use Violeta\CustomShippingModule\Api\CustomShippingApiClient;
 use Violeta\CustomShippingModule\Helper\MappingHelper;
 
 class Customshipping extends AbstractCarrier implements CarrierInterface
@@ -34,7 +34,7 @@ class Customshipping extends AbstractCarrier implements CarrierInterface
         LoggerInterface $logger,
         ResultFactory $rateResultFactory,
         MethodFactory $rateMethodFactory,
-        CustomShippingApiData $apiData,
+        CustomShippingApiClient $apiData,
         StoreManagerInterface $storeManager,
         CurrencyFactory $currencyFactory,
         MappingHelper $helper
