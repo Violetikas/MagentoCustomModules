@@ -78,12 +78,10 @@ class CustomerChangeTracker
 
     public function remember(): void
     {
-        // Remove all existing entries.
         foreach ($this->previousCustomer->create()->getCollection() as $item) {
             $item->delete();
         }
 
-        // Fill with current values.
         foreach ($this->current as $customerId => $updatedAt) {
             $new = $this->previousCustomer->create();
             $new->addData([
