@@ -37,11 +37,7 @@ class OrderDeletedObserver implements ObserverInterface
         if (!$apiOrder->isEmpty()) {
             $apiOrderData = $apiOrder->getData();
             $response = $this->apiData->deleteOrder($apiOrderData['api_order_id']);
-            try {
                 $apiOrder->delete();
-            } catch (\Exception $e) {
-                echo $e->getMessage();
-            }
             $this->logger->log(
                 'Delete order response: ',
                 ['response' => $response]

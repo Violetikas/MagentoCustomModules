@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Violeta\CronModule\Output;
-
 
 use Violeta\CronModule\Helper\ConfigHelper;
 use Violeta\CronModule\Writer\WriterFactory;

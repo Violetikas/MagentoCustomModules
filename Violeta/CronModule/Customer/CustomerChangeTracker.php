@@ -1,31 +1,26 @@
 <?php
 
-
 namespace Violeta\CronModule\Customer;
 
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use Violeta\CronModule\Model\ResourceModel\UserUpdate\CollectionFactory as UserUpdateCollectionFactory;
 use Violeta\CronModule\Model\UserUpdateFactory;
 
 class CustomerChangeTracker
 {
-    /** @var CollectionFactory */
     private $customer;
-    /** @var UserUpdateFactory */
     private $previousCustomer;
-    /**
-     * @var array
-     */
     private $current = [];
+    private $userUpdateFactory;
 
-    /**
-     * CustomerChangeTracker constructor.
-     * @param CollectionFactory $customer
-     * @param UserUpdateFactory $previousCustomer
-     */
-    public function __construct(CollectionFactory $customer, UserUpdateFactory $previousCustomer)
-    {
+    public function __construct(
+        CollectionFactory $customer,
+        UserUpdateCollectionFactory $previousCustomer,
+        UserUpdateFactory $userUpdateFactory
+    ) {
         $this->customer = $customer;
         $this->previousCustomer = $previousCustomer;
+        $this->userUpdateFactory = $userUpdateFactory;
     }
 
     public function getChangesSinceLastTime(): array
@@ -38,7 +33,7 @@ class CustomerChangeTracker
         $this->setCurrent($current);
 
         $previous = [];
-        foreach ($this->previousCustomer->create()->getCollection() as $customer) {
+        foreach ($this->previousCustomer->create() as $customer) {
             $previous[$customer->getData('customer_id')] = $customer->getData('updated_at');
         }
 
@@ -46,6 +41,7 @@ class CustomerChangeTracker
         $deletedIds = array_keys(array_diff_key($previous, $current));
         $updatedIds = [];
         foreach ($current as $customerId => $updatedAt) {
+            // TODO extract to private method
             if (array_key_exists($customerId, $previous) && $updatedAt > $previous[$customerId]) {
                 $updatedIds[] = $customerId;
             }
@@ -78,12 +74,13 @@ class CustomerChangeTracker
 
     public function remember(): void
     {
-        foreach ($this->previousCustomer->create()->getCollection() as $item) {
+        $collection = $this->userUpdateFactory->create();
+        foreach ($collection as $item) {
             $item->delete();
         }
 
         foreach ($this->current as $customerId => $updatedAt) {
-            $new = $this->previousCustomer->create();
+            $new = $this->userUpdateFactory->create();
             $new->addData([
                 'customer_id' => $customerId,
                 'updated_at' => $updatedAt,
