@@ -8,52 +8,43 @@ use Violeta\CronModule\Model\UserUpdateFactory;
 
 class CustomerChangeTracker
 {
-    private $customer;
+    private $customerCollectionFactory;
     private $previousCustomer;
-    private $current = [];
+    private $currentCustomerDataSaved;
     private $userUpdateFactory;
 
     public function __construct(
-        CollectionFactory $customer,
+        CollectionFactory $customerCollectionFactory,
         UserUpdateCollectionFactory $previousCustomer,
         UserUpdateFactory $userUpdateFactory
     ) {
-        $this->customer = $customer;
+        $this->customerCollectionFactory = $customerCollectionFactory;
         $this->previousCustomer = $previousCustomer;
         $this->userUpdateFactory = $userUpdateFactory;
     }
 
     public function getChangesSinceLastTime(): array
     {
-        $current = [];
-        $collection = $this->customer->create();
-        foreach ($collection as $customer) {
-            $current[$customer->getId()] = $customer->getData('updated_at');
-        }
-        $this->setCurrent($current);
+        $current = $this->getCurrentCustomers();
+        $previous = $this->getPreviousCustomers();
 
-        $previous = [];
-        foreach ($this->previousCustomer->create() as $customer) {
-            $previous[$customer->getData('customer_id')] = $customer->getData('updated_at');
-        }
+        $collection = $this->customerCollectionFactory->create();
+        $results = [];
 
         $createdIds = array_keys(array_diff_key($current, $previous));
-        $deletedIds = array_keys(array_diff_key($previous, $current));
-        $updatedIds = [];
-        foreach ($current as $customerId => $updatedAt) {
-            // TODO extract to private method
-            if (array_key_exists($customerId, $previous) && $updatedAt > $previous[$customerId]) {
-                $updatedIds[] = $customerId;
-            }
-        }
-
-        $results = [];
         foreach ($createdIds as $customerId) {
             $results[] = [
                 'action' => 'added',
                 'customer_id' => $customerId,
                 'data' => $collection->getItemById($customerId)->getData(),
             ];
+        }
+
+        $updatedIds = [];
+        foreach ($current as $customerId => $updatedAt) {
+            if (array_key_exists($customerId, $previous) && $updatedAt > $previous[$customerId]) {
+                $updatedIds[] = $customerId;
+            }
         }
         foreach ($updatedIds as $customerId) {
             $results[] = [
@@ -62,6 +53,8 @@ class CustomerChangeTracker
                 'data' => $collection->getItemById($customerId)->getData(),
             ];
         }
+
+        $deletedIds = array_keys(array_diff_key($previous, $current));
         foreach ($deletedIds as $customerId) {
             $results[] = [
                 'action' => 'deleted',
@@ -79,7 +72,7 @@ class CustomerChangeTracker
             $item->delete();
         }
 
-        foreach ($this->current as $customerId => $updatedAt) {
+        foreach ($this->currentCustomerDataSaved as $customerId => $updatedAt) {
             $new = $this->userUpdateFactory->create();
             $new->addData([
                 'customer_id' => $customerId,
@@ -87,12 +80,31 @@ class CustomerChangeTracker
             ]);
             $new->save();
         }
-
-        $this->setCurrent([]);
     }
 
-    private function setCurrent(array $current): void
+    private function saveCurrentCustomerData(array $currentCustomerData): void
     {
-        $this->current = $current;
+        $this->currentCustomerDataSaved = $currentCustomerData;
+    }
+
+    private function getCurrentCustomers(): array
+    {
+        $currentCustomerData = [];
+        $collection = $this->customerCollectionFactory->create();
+        foreach ($collection as $customer) {
+            $currentCustomerData[$customer->getId()] = $customer->getData('updated_at');
+        }
+        $this->saveCurrentCustomerData($currentCustomerData);
+        return $currentCustomerData;
+    }
+
+    private function getPreviousCustomers(): array
+    {
+        $previous = [];
+        $collection = $this->previousCustomer->create();
+        foreach ($collection as $customer) {
+            $previous[$customer->getData('customer_id')] = $customer->getData('updated_at');
+        }
+        return $previous;
     }
 }
