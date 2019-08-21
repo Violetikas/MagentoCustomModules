@@ -27,7 +27,6 @@ class CustomerChangeTrackerTest extends TestCase
 
     public function testFindDeletedCustomers()
     {
-
         $changeTracker = new CustomerChangeTracker(
             $this->customerCollectionFactory,
             $this->previousCustomer,
@@ -47,7 +46,6 @@ class CustomerChangeTrackerTest extends TestCase
             21 => "2019-08-21 07:34:59",
             22 => "2019-08-21 08:56:38",
         ];
-
 
         $deletedCustomers = $changeTracker->findDeletedCustomers($currentCustomerData, $previous);
         $this->assertEquals([
