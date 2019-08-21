@@ -70,28 +70,7 @@ class CustomerChangeTracker
         }
     }
 
-    private function getCurrentCustomers(): array
-    {
-        $currentCustomerData = [];
-        $collection = $this->customerCollectionFactory->create();
-        foreach ($collection as $customer) {
-            $currentCustomerData[$customer->getId()] = $customer->getData('updated_at');
-        }
-        $this->saveCurrentCustomerData($currentCustomerData);
-        return $currentCustomerData;
-    }
-
-    private function getPreviousCustomers(): array
-    {
-        $previous = [];
-        $collection = $this->previousCustomer->create();
-        foreach ($collection as $customer) {
-            $previous[$customer->getData('customer_id')] = $customer->getData('updated_at');
-        }
-        return $previous;
-    }
-
-    private function findCreatedCustomers($current, $previous): array
+    public function findCreatedCustomers($current, $previous): array
     {
         $collection = $this->customerCollectionFactory->create();
         $results = [];
@@ -106,7 +85,7 @@ class CustomerChangeTracker
         return $results;
     }
 
-    private function findUpdatedCustomers($current, $previous): array
+    public function findUpdatedCustomers($current, $previous): array
     {
         $results = [];
         $collection = $this->customerCollectionFactory->create();
@@ -137,6 +116,27 @@ class CustomerChangeTracker
             ];
         }
         return $results;
+    }
+
+    private function getCurrentCustomers(): array
+    {
+        $currentCustomerData = [];
+        $collection = $this->customerCollectionFactory->create();
+        foreach ($collection as $customer) {
+            $currentCustomerData[$customer->getId()] = $customer->getData('updated_at');
+        }
+        $this->saveCurrentCustomerData($currentCustomerData);
+        return $currentCustomerData;
+    }
+
+    private function getPreviousCustomers(): array
+    {
+        $previous = [];
+        $collection = $this->previousCustomer->create();
+        foreach ($collection as $customer) {
+            $previous[$customer->getData('customer_id')] = $customer->getData('updated_at');
+        }
+        return $previous;
     }
 
     private function saveCurrentCustomerData(array $currentCustomerData): void
