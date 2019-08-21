@@ -7,16 +7,9 @@ use Violeta\CronModule\Writer\WriterFactory;
 
 class ChangesOutputWriter
 {
-    /** @var WriterFactory */
     private $writerFactory;
-    /** @var ConfigHelper */
     private $helper;
 
-    /**
-     * ChangesOutputWriter constructor.
-     * @param WriterFactory $writerFactory
-     * @param ConfigHelper $helper
-     */
     public function __construct(WriterFactory $writerFactory, ConfigHelper $helper)
     {
         $this->writerFactory = $writerFactory;
@@ -25,7 +18,7 @@ class ChangesOutputWriter
 
     public function writeChanges(array $changes): string
     {
-        $writer = $this->writerFactory->create($this->helper->getConfigValue('output_format'));
+        $writer = $this->writerFactory->selectFileExtension($this->helper->getConfigValue('output_format'));
         $outputFile = $this->getOutputDir() . '/' . date('Ymd_His') . '.' . $writer->getExtension();
         $writer->write($outputFile, $changes);
 
