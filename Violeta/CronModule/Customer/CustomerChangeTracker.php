@@ -30,21 +30,24 @@ class CustomerChangeTracker
     public function getChangesSinceLastTime(): array
     {
         $current = $this->getCurrentCustomers();
-
         $previous = $this->getPreviousCustomers();
+
+        $createdCustomers = $this->findCreatedCustomers($current, $previous);
+        $updatedCustomers = $this->findUpdatedCustomers($current, $previous);
+        $deletedCustomers = $this->findDeletedCustomers($current, $previous);
 
         $results = [];
 
-        if (!empty($this->findCreatedCustomers($current, $previous))) {
-            $results[] = $this->findCreatedCustomers($current, $previous);
+        if (!empty($createdCustomers)) {
+            $results[] = $createdCustomers;
         }
 
-        if (!empty($this->findUpdatedCustomers($current, $previous))) {
-            $results[] = $this->findUpdatedCustomers($current, $previous);
+        if (!empty($updatedCustomers)) {
+            $results[] = $updatedCustomers;
         }
 
-        if (!empty($this->findDeletedCustomers($current, $previous))) {
-            $results[] = $this->findDeletedCustomers($current, $previous);
+        if (!empty($deletedCustomers)) {
+            $results[] = $deletedCustomers;
         }
 
         return $results;
@@ -65,11 +68,6 @@ class CustomerChangeTracker
             ]);
             $this->resourceModelFactory->create()->save($new);
         }
-    }
-
-    private function saveCurrentCustomerData(array $currentCustomerData): void
-    {
-        $this->currentCustomerDataSaved = $currentCustomerData;
     }
 
     private function getCurrentCustomers(): array
@@ -139,5 +137,10 @@ class CustomerChangeTracker
             ];
         }
         return $results;
+    }
+
+    private function saveCurrentCustomerData(array $currentCustomerData): void
+    {
+        $this->currentCustomerDataSaved = $currentCustomerData;
     }
 }
