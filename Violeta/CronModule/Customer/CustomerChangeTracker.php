@@ -126,7 +126,7 @@ class CustomerChangeTracker
         return $results;
     }
 
-    private function findDeletedCustomers($current, $previous): array
+    public function findDeletedCustomers($current, $previous): array
     {
         $results = [];
         $deletedIds = array_keys(array_diff_key($previous, $current));
