@@ -67,7 +67,7 @@ class CustomerChangeTracker
 
     public function remember(): void
     {
-        $collection = $this->userUpdateFactory->create();
+        $collection = $this->previousCustomer->create();
         foreach ($collection as $item) {
             $item->delete();
         }

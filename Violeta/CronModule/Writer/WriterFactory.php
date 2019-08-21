@@ -2,8 +2,6 @@
 
 namespace Violeta\CronModule\Writer;
 
-
-
 class WriterFactory
 {
     public function create(string $type): CustomerChangesWriterInterface
