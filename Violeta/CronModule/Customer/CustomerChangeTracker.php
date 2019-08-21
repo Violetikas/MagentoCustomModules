@@ -70,7 +70,7 @@ class CustomerChangeTracker
         }
     }
 
-    public function findCreatedCustomers($current, $previous): array
+    private function findCreatedCustomers($current, $previous): array
     {
         $collection = $this->customerCollectionFactory->create();
         $results = [];
@@ -85,7 +85,7 @@ class CustomerChangeTracker
         return $results;
     }
 
-    public function findUpdatedCustomers($current, $previous): array
+    private function findUpdatedCustomers($current, $previous): array
     {
         $results = [];
         $collection = $this->customerCollectionFactory->create();
