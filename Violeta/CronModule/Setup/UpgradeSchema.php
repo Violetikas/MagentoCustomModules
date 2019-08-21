@@ -43,9 +43,4 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ->addIndex('customer', ['customer_id'], ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]);
         $installer->getConnection()->createTable($table);
     }
-
-    public function getTableData(SchemaSetupInterface $installer)
-    {
-        $table = $installer->getConnection()->getTableName('user_updates');
-    }
 }
