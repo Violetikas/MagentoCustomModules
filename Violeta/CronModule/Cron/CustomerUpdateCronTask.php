@@ -6,28 +6,28 @@ use Violeta\CronModule\Customer\CustomerChangeTracker;
 use Violeta\CronModule\Logger\CustomCronLogger;
 use Violeta\CronModule\Output\ChangesOutputWriter;
 
-class UserUpdateCronTask
+class CustomerUpdateCronTask
 {
     protected $logger;
-    private $tracker;
-    private $output;
+    private $customerChangeTracker;
+    private $outputWiter;
 
     public function __construct(
-        CustomerChangeTracker $tracker,
+        CustomerChangeTracker $customerChangeTracker,
         CustomCronLogger $logger,
-        ChangesOutputWriter $output
+        ChangesOutputWriter $outputWiter
     ) {
         $this->logger = $logger;
-        $this->tracker = $tracker;
-        $this->output = $output;
+        $this->customerChangeTracker = $customerChangeTracker;
+        $this->outputWiter = $outputWiter;
     }
 
     public function execute(): void
     {
         $this->logger->log('Looking for changes since last time.');
-        $changes = $this->tracker->getChangesSinceLastTime();
-        $outputFile = $this->output->writeChanges($changes);
+        $changes = $this->customerChangeTracker->getChangesSinceLastTime();
+        $outputFile = $this->outputWiter->writeChanges($changes);
         $this->logger->log(sprintf('%d changes written to file %s', count($changes), $outputFile));
-        $this->tracker->remember();
+        $this->customerChangeTracker->rememberCurrentState();
     }
 }

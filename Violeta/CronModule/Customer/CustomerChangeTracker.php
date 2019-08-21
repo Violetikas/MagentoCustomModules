@@ -5,6 +5,7 @@ namespace Violeta\CronModule\Customer;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Violeta\CronModule\Model\ResourceModel\UserUpdate\CollectionFactory as UserUpdateCollectionFactory;
 use Violeta\CronModule\Model\UserUpdateFactory;
+use Violeta\CronModule\Model\ResourceModel\UserUpdateFactory as ResourceModelFactory;
 
 class CustomerChangeTracker
 {
@@ -12,60 +13,44 @@ class CustomerChangeTracker
     private $previousCustomer;
     private $currentCustomerDataSaved;
     private $userUpdateFactory;
+    private $resourceModelFactory;
 
     public function __construct(
         CollectionFactory $customerCollectionFactory,
         UserUpdateCollectionFactory $previousCustomer,
-        UserUpdateFactory $userUpdateFactory
+        UserUpdateFactory $userUpdateFactory,
+        ResourceModelFactory $resourceModelFactory
     ) {
         $this->customerCollectionFactory = $customerCollectionFactory;
         $this->previousCustomer = $previousCustomer;
         $this->userUpdateFactory = $userUpdateFactory;
+        $this->resourceModelFactory = $resourceModelFactory;
     }
 
     public function getChangesSinceLastTime(): array
     {
         $current = $this->getCurrentCustomers();
+
         $previous = $this->getPreviousCustomers();
 
-        $collection = $this->customerCollectionFactory->create();
         $results = [];
 
-        $createdIds = array_keys(array_diff_key($current, $previous));
-        foreach ($createdIds as $customerId) {
-            $results[] = [
-                'action' => 'added',
-                'customer_id' => $customerId,
-                'data' => $collection->getItemById($customerId)->getData(),
-            ];
+        if (!empty($this->findCreatedCustomers($current, $previous))) {
+            $results[] = $this->findCreatedCustomers($current, $previous);
         }
 
-        $updatedIds = [];
-        foreach ($current as $customerId => $updatedAt) {
-            if (array_key_exists($customerId, $previous) && $updatedAt > $previous[$customerId]) {
-                $updatedIds[] = $customerId;
-            }
-        }
-        foreach ($updatedIds as $customerId) {
-            $results[] = [
-                'action' => 'updated',
-                'customer_id' => $customerId,
-                'data' => $collection->getItemById($customerId)->getData(),
-            ];
+        if (!empty($this->findUpdatedCustomers($current, $previous))) {
+            $results[] = $this->findUpdatedCustomers($current, $previous);
         }
 
-        $deletedIds = array_keys(array_diff_key($previous, $current));
-        foreach ($deletedIds as $customerId) {
-            $results[] = [
-                'action' => 'deleted',
-                'customer_id' => $customerId,
-            ];
+        if (!empty($this->findDeletedCustomers($current, $previous))) {
+            $results[] = $this->findDeletedCustomers($current, $previous);
         }
 
         return $results;
     }
 
-    public function remember(): void
+    public function rememberCurrentState(): void
     {
         $collection = $this->previousCustomer->create();
         foreach ($collection as $item) {
@@ -78,7 +63,7 @@ class CustomerChangeTracker
                 'customer_id' => $customerId,
                 'updated_at' => $updatedAt,
             ]);
-            $new->save();
+            $this->resourceModelFactory->create()->save($new);
         }
     }
 
@@ -106,5 +91,53 @@ class CustomerChangeTracker
             $previous[$customer->getData('customer_id')] = $customer->getData('updated_at');
         }
         return $previous;
+    }
+
+    private function findCreatedCustomers($current, $previous): array
+    {
+        $collection = $this->customerCollectionFactory->create();
+        $results = [];
+        $createdIds = array_keys(array_diff_key($current, $previous));
+        foreach ($createdIds as $customerId) {
+            $results[] = [
+                'action' => 'added',
+                'customer_id' => $customerId,
+                'data' => $collection->getItemById($customerId)->getData(),
+            ];
+        }
+        return $results;
+    }
+
+    private function findUpdatedCustomers($current, $previous): array
+    {
+        $results = [];
+        $collection = $this->customerCollectionFactory->create();
+        $updatedIds = [];
+        foreach ($current as $customerId => $updatedAt) {
+            if (array_key_exists($customerId, $previous) && $updatedAt > $previous[$customerId]) {
+                $updatedIds[] = $customerId;
+            }
+        }
+        foreach ($updatedIds as $customerId) {
+            $results[] = [
+                'action' => 'updated',
+                'customer_id' => $customerId,
+                'data' => $collection->getItemById($customerId)->getData(),
+            ];
+        }
+        return $results;
+    }
+
+    private function findDeletedCustomers($current, $previous): array
+    {
+        $results = [];
+        $deletedIds = array_keys(array_diff_key($previous, $current));
+        foreach ($deletedIds as $customerId) {
+            $results[] = [
+                'action' => 'deleted',
+                'customer_id' => $customerId,
+            ];
+        }
+        return $results;
     }
 }
